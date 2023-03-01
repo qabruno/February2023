@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using NUnit.Framework;
+using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +31,7 @@ namespace February2023.Pages
 
             // Input description into Description textbox
             IWebElement descriptionTextbox = driver.FindElement(By.Id("Description"));
-            descriptionTextbox.SendKeys("February2023");
+            descriptionTextbox.SendKeys("Feb23");
 
             // Input Price per Unit into price per unit textbox
             IWebElement priceTextbox = driver.FindElement(By.XPath("//*[@id=\"TimeMaterialEditForm\"]/div/div[4]/div/span[1]/span/input[1]"));
@@ -47,15 +48,20 @@ namespace February2023.Pages
             Thread.Sleep(5000);
 
             IWebElement newCode = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
+            IWebElement newDescription = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[3]"));
 
-            if (newCode.Text == "February2023")
-            {
-                Console.WriteLine("New Time record created successfully!");
-            }
-            else
-            {
-                Console.WriteLine("Record hasn't been created!");
-            }
+            Assert.That(newCode.Text == "February2023", "Actual code and expected code do not match.");
+            Assert.That(newDescription.Text == "Feb23", " Actual description and expected description do not match.");
+
+
+            //if (newCode.Text == "February2023")
+            //{
+            //    Assert.Pass("New Time record created successfully!");
+            //}
+            //else
+            //{
+            //    Assert.Fail("Record hasn't been created!");
+            //}
         }
 
         public void EditTM(IWebDriver driver)
