@@ -6,52 +6,37 @@ using OpenQA.Selenium.Chrome;
 namespace February2023.Tests
 {
     [TestFixture]
+    [Parallelizable]
     public class TM_Tests : CommonDriver
     {
-        [SetUp]
-        public void LoginSteps()
-        {
-           driver = new ChromeDriver(@"D:/February2023");
+        // Page objects initialization
+        HomePage homePageObj = new HomePage();
+        TMPage tmPageObj = new TMPage();
 
-            // Login page object initialization and definition
-            LoginPage loginPageObj = new LoginPage();
-            loginPageObj.LoginActions(driver);
 
-            // Home page object initialization and definition
-            HomePage homePageObj = new HomePage();
-            homePageObj.GoToTMPage(driver);
-        }
-
-        [Test]
+        [Test, Order(1), Description("Check if user is able to create Time record with valid data")]
         public void CreateTMTest()
         {
             // TM page object initialization and definition
-            TMPage tmPageObj = new TMPage();
+            homePageObj.GoToTMPage(driver);
             tmPageObj.CreateTM(driver);
         }
 
-        [Test]
+        [Test, Order(2), Description("Check if user is able to edit an existing record with valid data")]
         public void EditTMTest()
         {
-            // TM page object initialization and definition
-            TMPage tmPageObj = new TMPage();
-            // Edit TM
+            homePageObj.GoToTMPage(driver);
             tmPageObj.EditTM(driver);
         }
 
-        [Test]
+        [Test, Order(3), Description("Check if user is able to delete an existing Time record")]
         public void DeleteTMTest()
         {
-            // TM page object initialization and definition
-            TMPage tmPageObj = new TMPage();
-            // Delete
-            tmPageObj.DeleteTM(driver);
-        }
 
-        [TearDown]
-        public void CloseTestRun()
-        {
-            driver.Quit();
+            homePageObj.GoToTMPage(driver);
+            tmPageObj.DeleteTM(driver);
         }
     }
 }
+
+

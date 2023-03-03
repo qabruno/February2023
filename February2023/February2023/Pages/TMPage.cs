@@ -66,12 +66,78 @@ namespace February2023.Pages
 
         public void EditTM(IWebDriver driver)
         {
-            // Code for edit TM
+
+            // Click on Edit Buttonto make changes to type Code
+            Thread.Sleep(1000);
+            IWebElement goToLastPageButton = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[4]/a[4]"));
+            goToLastPageButton.Click();
+
+            IWebElement recordToBeEdited = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/div[2]/table/tbody/tr[last()]/td[1]"));
+
+            if (recordToBeEdited.Text == "February2023")
+            {
+
+                IWebElement LastRecordEdit = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[5]/a[1]"));
+                LastRecordEdit.Click();
+            }
+            else
+            {
+                Assert.Fail("Record to be edited not found.");
+            }
+
+
+            //Identify Code Text Box and clear last record
+            driver.FindElement(By.XPath("//*[@id=\"Code\"]")).Clear();
+
+
+            //Identify Code Text Box and Write New Record
+            IWebElement CodeTextBox = driver.FindElement(By.XPath("//*[@id=\"Code\"]"));
+            CodeTextBox.SendKeys("123456");
+
+
+            //Identify and Click on Save Button
+            IWebElement SaveButton = driver.FindElement(By.Id("SaveButton"));
+            SaveButton.Click();
+
+
+            //Identify and Click on Last Page Button Page
+            Thread.Sleep(1000);
+            driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[4]/a[4]")).Click();
+            Thread.Sleep(1000);
+            IWebElement lastEditedRecord = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
+
+            Assert.That(lastEditedRecord.Text == "123456", "Record hasn't been edited.");
+
         }
 
         public void DeleteTM(IWebDriver driver)
         {
-            // Code for Delete TM
+            //Identify and Click on Last Page Button Page
+            Thread.Sleep(1000);
+            driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[4]/a[4]/span")).Click();
+
+            IWebElement recordToBeDeleted = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/div[2]/table/tbody/tr[last()]/td[1]"));
+
+            if (recordToBeDeleted.Text == "123456")
+            {
+                //Find and click on delete button for last record
+                IWebElement deleteButton = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/div[2]/table/tbody/tr[last()]/td[5]/a[2]"));
+                deleteButton.Click();
+            }
+            else
+            {
+                Assert.Fail("Record to be deleted not found.");
+            }
+
+            IWebElement lastRecordDelete = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[5]/a[2]"));
+            lastRecordDelete.Click();
+            Thread.Sleep(2000);
+
+            //Acceptance on Pop up to delete record
+            driver.SwitchTo().Alert().Accept();
+
+            Assert.That(lastRecordDelete.Text != "123456", "Record hasn't been deleted");
         }
     }
+    
 }
